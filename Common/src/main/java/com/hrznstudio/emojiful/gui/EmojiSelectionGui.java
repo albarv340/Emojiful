@@ -129,7 +129,7 @@ public class EmojiSelectionGui implements IDrawableGuiListener {
         }
 
         if (this.showingSelectionArea) {
-            fieldWidget.setFocus(textFieldRectangle.contains((int) mouseX, (int) mouseY));
+            fieldWidget.setFocused(textFieldRectangle.contains((int) mouseX, (int) mouseY));
             if (categorySelectionArea.contains((int) mouseX, (int) mouseY)) {
                 for (int i = 0; i < 7; i++) {
                     int selCategory = i + categoryPointer;
@@ -221,6 +221,16 @@ public class EmojiSelectionGui implements IDrawableGuiListener {
             updateFilter();
             return true;
         }
+        return false;
+    }
+
+    @Override
+    public void setFocused(boolean b) {
+
+    }
+
+    @Override
+    public boolean isFocused() {
         return false;
     }
 

@@ -121,13 +121,13 @@ public class EmojiFontRenderer extends Font {
     }
 
     @Override
-    public int drawInBatch(String p_228079_1_, float p_228079_2_, float p_228079_3_, int p_228079_4_, boolean p_228079_5_, Matrix4f p_228079_6_, MultiBufferSource p_228079_7_, boolean p_228079_8_, int p_228079_9_, int p_228079_10_) {
+        public int drawInBatch(String p_228079_1_, float p_228079_2_, float p_228079_3_, int p_228079_4_, boolean p_228079_5_, Matrix4f p_228079_6_, MultiBufferSource p_228079_7_, DisplayMode p_228079_8_, int p_228079_9_, int p_228079_10_) {
         return super.drawInBatch(p_228079_1_, p_228079_2_, p_228079_3_, p_228079_4_, p_228079_5_, p_228079_6_, p_228079_7_, p_228079_8_, p_228079_9_, p_228079_10_);
 
     }
 
     @Override
-    public float renderText(String text, float x, float y, int color, boolean isShadow, Matrix4f matrix, MultiBufferSource buffer, boolean isTransparent, int colorBackgroundIn, int packedLight) {
+    public float renderText(String text, float x, float y, int color, boolean isShadow, Matrix4f matrix, MultiBufferSource buffer, DisplayMode displayMode, int colorBackgroundIn, int packedLight) {
         if (text.isEmpty())
             return 0;
         HashMap<Integer, Emoji> emojis = new LinkedHashMap<>();
@@ -138,13 +138,13 @@ public class EmojiFontRenderer extends Font {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        EmojiCharacterRenderer fontrenderer$characterrenderer = new EmojiCharacterRenderer(emojis, buffer, x, y, color, isShadow, matrix, isTransparent, packedLight);
+        EmojiCharacterRenderer fontrenderer$characterrenderer = new EmojiCharacterRenderer(emojis, buffer, x, y, color, isShadow, matrix, displayMode, packedLight);
         StringDecomposer.iterateFormatted(text, Style.EMPTY, fontrenderer$characterrenderer);
         return fontrenderer$characterrenderer.finish(colorBackgroundIn, x);
     }
 
     @Override
-    public int drawInBatch(FormattedCharSequence reorderingProcessor, float x, float y, int color, boolean isShadow, Matrix4f matrix, MultiBufferSource buffer, boolean isTransparent, int colorBackgroundIn, int packedLight) {
+    public int drawInBatch(FormattedCharSequence reorderingProcessor, float x, float y, int color, boolean isShadow, Matrix4f matrix, MultiBufferSource buffer, DisplayMode displayMode, int colorBackgroundIn, int packedLight) {
         if (reorderingProcessor != null) {
             StringBuilder builder = new StringBuilder();
             if (reorderingProcessor != null) {
@@ -191,17 +191,17 @@ public class EmojiFontRenderer extends Font {
                 });
                 Matrix4f matrix4f = new Matrix4f(matrix);
                 if (isShadow) {
-                    EmojiCharacterRenderer fontrenderer$characterrenderer = new EmojiCharacterRenderer(emojis, buffer, x, y, color, true, matrix, isTransparent, packedLight);
+                    EmojiCharacterRenderer fontrenderer$characterrenderer = new EmojiCharacterRenderer(emojis, buffer, x, y, color, true, matrix, displayMode, packedLight);
                     FormattedCharSequence.fromList(processors).accept(fontrenderer$characterrenderer);
                     fontrenderer$characterrenderer.finish(colorBackgroundIn, x);
                     matrix4f.translate(SHADOW_OFFSET);
                 }
-                EmojiCharacterRenderer fontrenderer$characterrenderer = new EmojiCharacterRenderer(emojis, buffer, x, y, color, false, matrix4f, isTransparent, packedLight);
+                EmojiCharacterRenderer fontrenderer$characterrenderer = new EmojiCharacterRenderer(emojis, buffer, x, y, color, false, matrix4f, displayMode, packedLight);
                 FormattedCharSequence.fromList(processors).accept(fontrenderer$characterrenderer);
                 return (int) fontrenderer$characterrenderer.finish(colorBackgroundIn, x);
             }
         }
-        return super.drawInBatch(reorderingProcessor, x, y, color, isShadow, matrix, buffer, isTransparent, colorBackgroundIn, packedLight);
+        return super.drawInBatch(reorderingProcessor, x, y, color, isShadow, matrix, buffer, displayMode, colorBackgroundIn, packedLight);
     }
 
     class CharacterProcessor implements FormattedCharSequence {
@@ -231,7 +231,7 @@ public class EmojiFontRenderer extends Font {
         private final float b;
         private final float a;
         private final Matrix4f matrix;
-        private final boolean seeThrough;
+        private final DisplayMode displayMode;
         private final int packedLight;
         private float x;
         private final float y;
@@ -239,7 +239,7 @@ public class EmojiFontRenderer extends Font {
         @Nullable
         private List<BakedGlyph.Effect> effects;
 
-        public EmojiCharacterRenderer(HashMap<Integer, Emoji> emojis, MultiBufferSource p_i232250_2_, float p_i232250_3_, float p_i232250_4_, int p_i232250_5_, boolean p_i232250_6_, Matrix4f p_i232250_7_, boolean p_i232250_8_, int p_i232250_9_) {
+        public EmojiCharacterRenderer(HashMap<Integer, Emoji> emojis, MultiBufferSource p_i232250_2_, float p_i232250_3_, float p_i232250_4_, int p_i232250_5_, boolean p_i232250_6_, Matrix4f p_i232250_7_, DisplayMode p_i232250_8_, int p_i232250_9_) {
             this.buffer = p_i232250_2_;
             this.emojis = emojis;
             this.x = p_i232250_3_;
@@ -251,7 +251,7 @@ public class EmojiFontRenderer extends Font {
             this.b = (float) (p_i232250_5_ & 255) / 255.0F * this.dimFactor;
             this.a = (float) (p_i232250_5_ >> 24 & 255) / 255.0F;
             this.matrix = p_i232250_7_;
-            this.seeThrough = p_i232250_8_;
+            this.displayMode = p_i232250_8_;
             this.packedLight = p_i232250_9_;
         }
 
@@ -295,7 +295,7 @@ public class EmojiFontRenderer extends Font {
                 if (!(texturedglyph instanceof EmptyGlyph)) {
                     float f5 = flag ? iglyph.getBoldOffset() : 0.0F;
                     float f4 = this.dropShadow ? iglyph.getShadowOffset() : 0.0F;
-                    VertexConsumer ivertexbuilder = this.buffer.getBuffer(texturedglyph.renderType(this.seeThrough ? DisplayMode.SEE_THROUGH : DisplayMode.NORMAL));
+                    VertexConsumer ivertexbuilder = this.buffer.getBuffer(texturedglyph.renderType(this.displayMode));
                     (EmojiFontRenderer.this).renderChar(texturedglyph, flag, style.isItalic(), f5, this.x + f4, this.y + f4, this.matrix, ivertexbuilder, f, f1, f2, f3, this.packedLight);
                 }
 
@@ -327,7 +327,7 @@ public class EmojiFontRenderer extends Font {
             if (this.effects != null) {
                 FontSet fontSet = (EmojiFontRenderer.this).getFontSet(Style.DEFAULT_FONT);
                 BakedGlyph texturedglyph = fontSet.whiteGlyph();
-                VertexConsumer ivertexbuilder = this.buffer.getBuffer(texturedglyph.renderType(this.seeThrough ? DisplayMode.SEE_THROUGH : DisplayMode.NORMAL));
+                VertexConsumer ivertexbuilder = this.buffer.getBuffer(texturedglyph.renderType(this.displayMode));
 
                 for (BakedGlyph.Effect texturedglyph$effect : this.effects) {
                     texturedglyph.renderEffect(texturedglyph$effect, this.matrix, ivertexbuilder, this.packedLight);

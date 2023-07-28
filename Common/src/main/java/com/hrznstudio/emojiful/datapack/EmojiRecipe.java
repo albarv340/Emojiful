@@ -1,6 +1,7 @@
 package com.hrznstudio.emojiful.datapack;
 
 import com.hrznstudio.emojiful.platform.Services;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -8,6 +9,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 public class EmojiRecipe implements Recipe<Container> {
 
@@ -29,7 +31,7 @@ public class EmojiRecipe implements Recipe<Container> {
     }
 
     @Override
-    public ItemStack assemble(Container inv) {
+    public @NotNull ItemStack assemble(Container container, RegistryAccess registryAccess) {
         return ItemStack.EMPTY;
     }
 
@@ -39,9 +41,9 @@ public class EmojiRecipe implements Recipe<Container> {
     }
 
     @Override
-    public ItemStack getResultItem() {
-        return ItemStack.EMPTY;
-    }
+    public @NotNull ItemStack getResultItem(RegistryAccess registryAccess) {
+        return ItemStack.EMPTY;    }
+
 
     @Override
     public ResourceLocation getId() {

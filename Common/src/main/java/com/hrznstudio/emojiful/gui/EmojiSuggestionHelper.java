@@ -72,6 +72,16 @@ public class EmojiSuggestionHelper implements IDrawableGuiListener {
         }
     }
 
+    @Override
+    public void setFocused(boolean b) {
+
+    }
+
+    @Override
+    public boolean isFocused() {
+        return false;
+    }
+
     public void updateSuggestionList(boolean skip) {
         final String s = this.chatScreen.input.getValue();
 
