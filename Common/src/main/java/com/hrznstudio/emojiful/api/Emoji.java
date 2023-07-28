@@ -286,6 +286,9 @@ public class Emoji implements Predicate<String> {
 
         @Override
         public void load(ResourceManager resourceManager) throws IOException {
+            if (this.cacheFile == null) {
+                return;
+            }
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             ImageIO.write(this.cacheFile, "png", os);
             InputStream is = new ByteArrayInputStream(os.toByteArray());

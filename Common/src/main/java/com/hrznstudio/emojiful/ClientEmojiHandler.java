@@ -2,9 +2,7 @@ package com.hrznstudio.emojiful;
 
 import com.esotericsoftware.yamlbeans.YamlReader;
 import com.google.gson.JsonElement;
-import com.hrznstudio.emojiful.api.Emoji;
-import com.hrznstudio.emojiful.api.EmojiCategory;
-import com.hrznstudio.emojiful.api.EmojiFromTwitmoji;
+import com.hrznstudio.emojiful.api.*;
 import com.hrznstudio.emojiful.platform.Services;
 import com.hrznstudio.emojiful.render.EmojiFontRenderer;
 import com.hrznstudio.emojiful.util.ProfanityFilter;
@@ -62,6 +60,7 @@ public class ClientEmojiHandler {
         if (Services.CONFIG.loadCustom()) loadCustomEmojis();
         //loadGithubEmojis();
         if (Services.CONFIG.loadTwemoji()) loadTwemojis();
+        loadAVOEmojiAPIEmojis();
         if (Services.CONFIG.getProfanityFilter()) ProfanityFilter.loadConfigs();
     }
 
@@ -105,6 +104,24 @@ public class ClientEmojiHandler {
             }
             ClientEmojiHandler.EMOJI_WITH_TEXTS.sort(Comparator.comparingInt(o -> o.sort));
             Constants.EMOJI_MAP.values().forEach(emojis -> emojis.sort(Comparator.comparingInt(o -> o.sort)));
+        } catch (Exception e) {
+            Constants.error = true;
+            Constants.LOG.error("Emojiful found an error while loading", e);
+        }
+    }
+
+ public static void loadAVOEmojiAPIEmojis() {
+        try {
+            CATEGORIES.add(0, new EmojiCategory("AVO", false));
+            for (Map.Entry<String, JsonElement> entry : CommonClass.readJsonFromUrl("https://script.google.com/macros/s/AKfycbzjrfYF_GDwuCEksMghivp8dLKAk-UtXGE3zl0fu8s4hzK60J3iFfh1QhtZJUvjUM8a/exec").getAsJsonObject().entrySet()) {
+                EmojiFromAVOAPI emoji = new EmojiFromAVOAPI();
+                emoji.name = entry.getKey();
+                emoji.location = entry.getKey();
+                emoji.url = entry.getValue().getAsString();
+                emoji.strings.add(":" + entry.getKey() + ":");
+                Constants.EMOJI_MAP.computeIfAbsent("AVO", s -> new ArrayList<>()).add(emoji);
+                Constants.EMOJI_LIST.add(emoji);
+            }
         } catch (Exception e) {
             Constants.error = true;
             Constants.LOG.error("Emojiful found an error while loading", e);
