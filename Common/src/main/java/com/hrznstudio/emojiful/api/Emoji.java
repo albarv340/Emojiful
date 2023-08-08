@@ -289,10 +289,16 @@ public class Emoji implements Predicate<String> {
             if (this.cacheFile == null) {
                 return;
             }
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            ImageIO.write(this.cacheFile, "png", os);
-            InputStream is = new ByteArrayInputStream(os.toByteArray());
-            setImage(this.loadTexture(is));
+            new Thread(() -> {
+                try {
+                    ByteArrayOutputStream os = new ByteArrayOutputStream();
+                    ImageIO.write(this.cacheFile, "png", os);
+                    InputStream is = new ByteArrayInputStream(os.toByteArray());
+                    setImage(this.loadTexture(is));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }).start();
         }
 
     }

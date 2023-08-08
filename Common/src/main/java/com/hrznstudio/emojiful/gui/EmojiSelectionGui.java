@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.FormattedText;
@@ -34,6 +35,7 @@ public class EmojiSelectionGui implements IDrawableGuiListener {
     private final Rect2i categorySelectionArea;
     private final Rect2i emojiInfoArea;
     private final Rect2i textFieldRectangle;
+    private final Rect2i clearTextButton;
     private int selectionPointer;
     private int categoryPointer;
     private int openSelectionAreaEmoji;
@@ -57,7 +59,8 @@ public class EmojiSelectionGui implements IDrawableGuiListener {
         this.selectionArea = new Rect2i(chatScreen.width - 14 - 11 * 12 + offset, chatScreen.height - 16 - 10 * 11 - 4, 11 * 12 + 4, 10 * 11 + 4);
         this.categorySelectionArea = new Rect2i(this.selectionArea.getX(), this.selectionArea.getY() + 20, 22, this.selectionArea.getHeight() - 20);
         this.emojiInfoArea = new Rect2i(this.selectionArea.getX() + 22, this.selectionArea.getY() + this.selectionArea.getHeight() - 20, this.selectionArea.getWidth() - 22, 20);
-        this.textFieldRectangle = new Rect2i(selectionArea.getX() + 6, selectionArea.getY() + 6, selectionArea.getWidth() - 12, 10);
+        this.textFieldRectangle = new Rect2i(selectionArea.getX() + 6, selectionArea.getY() + 6, selectionArea.getWidth() - 42, 10);
+        this.clearTextButton = new Rect2i(textFieldRectangle.getX() + textFieldRectangle.getWidth() + 2, selectionArea.getY() + 5, 30, 12);
         this.fieldWidget = new EditBox(ClientEmojiHandler.oldFontRenderer, textFieldRectangle.getX(), textFieldRectangle.getY(), textFieldRectangle.getWidth(), textFieldRectangle.getHeight(), MutableComponent.create(new LiteralContents("")));
         this.fieldWidget.setEditable(true);
         this.fieldWidget.setVisible(true);
@@ -72,6 +75,8 @@ public class EmojiSelectionGui implements IDrawableGuiListener {
             drawRectangle(stack, this.selectionArea);
             drawRectangle(stack, this.categorySelectionArea);
             drawRectangle(stack, this.emojiInfoArea);
+            drawRectangle(stack, this.clearTextButton);
+            Screen.drawString(stack, ClientEmojiHandler.oldFontRenderer,"Clear", clearTextButton.getX() + 2, clearTextButton.getY() + 2, 0xFF4444);
             for (int i = 0; i < 6; i++) {
                 drawLine(stack, i * 12f, i + selectionPointer);
             }
@@ -130,6 +135,9 @@ public class EmojiSelectionGui implements IDrawableGuiListener {
 
         if (this.showingSelectionArea) {
             fieldWidget.setFocused(textFieldRectangle.contains((int) mouseX, (int) mouseY));
+            if (clearTextButton.contains((int) mouseX, (int) mouseY)) {
+               fieldWidget.setValue("");
+            }
             if (categorySelectionArea.contains((int) mouseX, (int) mouseY)) {
                 for (int i = 0; i < 7; i++) {
                     int selCategory = i + categoryPointer;
@@ -219,6 +227,7 @@ public class EmojiSelectionGui implements IDrawableGuiListener {
     public boolean charTyped(char c, int mod) {
         if (fieldWidget.charTyped(c, mod)) {
             updateFilter();
+            chatScreen.input.setValue(chatScreen.input.getValue().substring(0, chatScreen.input.getValue().length() - 1));
             return true;
         }
         return false;
@@ -226,12 +235,12 @@ public class EmojiSelectionGui implements IDrawableGuiListener {
 
     @Override
     public void setFocused(boolean b) {
-
+        fieldWidget.setFocused(b);
     }
 
     @Override
     public boolean isFocused() {
-        return false;
+        return fieldWidget.isFocused();
     }
 
     public void drawLine(PoseStack stack, float height, int line) {
