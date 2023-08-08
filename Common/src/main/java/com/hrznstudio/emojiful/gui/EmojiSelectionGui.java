@@ -5,12 +5,10 @@ import com.hrznstudio.emojiful.Constants;
 import com.hrznstudio.emojiful.api.Emoji;
 import com.hrznstudio.emojiful.api.EmojiCategory;
 import com.hrznstudio.emojiful.platform.Services;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.ChatScreen;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.FormattedText;
@@ -21,10 +19,8 @@ import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 public class EmojiSelectionGui implements IDrawableGuiListener {
 
@@ -68,43 +64,43 @@ public class EmojiSelectionGui implements IDrawableGuiListener {
     }
 
     @Override
-    public void render(PoseStack stack) {
+    public void render(GuiGraphics guiGraphics) {
         if (this.openSelectionAreaEmoji != -1)
-            Minecraft.getInstance().font.draw(stack, Constants.EMOJI_MAP.get("Smileys & Emotion").get(openSelectionAreaEmoji).strings.get(0), openSelectionArea.getX(), openSelectionArea.getY(), 0);
+            guiGraphics.drawString(Minecraft.getInstance().font, Constants.EMOJI_MAP.get("Smileys & Emotion").get(openSelectionAreaEmoji).strings.get(0), openSelectionArea.getX(), openSelectionArea.getY(), 0);
         if (this.showingSelectionArea) {
-            drawRectangle(stack, this.selectionArea);
-            drawRectangle(stack, this.categorySelectionArea);
-            drawRectangle(stack, this.emojiInfoArea);
-            drawRectangle(stack, this.clearTextButton);
-            Screen.drawString(stack, ClientEmojiHandler.oldFontRenderer,"Clear", clearTextButton.getX() + 2, clearTextButton.getY() + 2, 0xFF4444);
+            drawRectangle(guiGraphics, this.selectionArea);
+            drawRectangle(guiGraphics, this.categorySelectionArea);
+            drawRectangle(guiGraphics, this.emojiInfoArea);
+            drawRectangle(guiGraphics, this.clearTextButton);
+            guiGraphics.drawString(ClientEmojiHandler.oldFontRenderer,"Clear", clearTextButton.getX() + 2, clearTextButton.getY() + 2, 0xFF4444);
             for (int i = 0; i < 6; i++) {
-                drawLine(stack, i * 12f, i + selectionPointer);
+                drawLine(guiGraphics, i * 12, i + selectionPointer);
             }
             int progressY = (int) (((this.emojiInfoArea.getY() - this.categorySelectionArea.getY() - 5) / ((double) getLineAmount())) * (selectionPointer));
-            drawRectangle(stack, new Rect2i(this.selectionArea.getX() + this.selectionArea.getWidth() - 2, this.categorySelectionArea.getY() + progressY, 1, 5), 0xff525252);
+            drawRectangle(guiGraphics, new Rect2i(this.selectionArea.getX() + this.selectionArea.getWidth() - 2, this.categorySelectionArea.getY() + progressY, 1, 5), 0xff525252);
             if (lastEmoji != null) {
-                Minecraft.getInstance().font.draw(stack, lastEmoji.strings.get(0), emojiInfoArea.getX() + 2, emojiInfoArea.getY() + 6, 0);
+                guiGraphics.drawString(Minecraft.getInstance().font, lastEmoji.strings.get(0), emojiInfoArea.getX() + 2, emojiInfoArea.getY() + 6, 0);
                 StringBuilder builder = new StringBuilder();
                 lastEmoji.strings.forEach(s -> builder.append(s).append(" "));
-                float textScale = 0.5f;
-                List<FormattedCharSequence> iTextPropertiesList = ClientEmojiHandler.oldFontRenderer.split(FormattedText.of(builder.toString()), (int) ((emojiInfoArea.getWidth() - 18) * (1 / textScale)));
-                float i = -iTextPropertiesList.size() / 2;
-                stack.pushPose();
-                stack.scale(textScale, textScale, textScale);
+                int textScale = 2;
+                List<FormattedCharSequence> iTextPropertiesList = ClientEmojiHandler.oldFontRenderer.split(FormattedText.of(builder.toString()), ((emojiInfoArea.getWidth() - 18) * textScale));
+                int i = -iTextPropertiesList.size() / 2;
+                guiGraphics.pose().pushPose();
+                guiGraphics.pose().scale(1f / textScale, 1f / textScale, 1f / textScale);
                 for (FormattedCharSequence reorderingProcessor : iTextPropertiesList) {
                     StringBuilder stringBuilder = new StringBuilder();
                     reorderingProcessor.accept((p_accept_1_, p_accept_2_, ch) -> {
                         stringBuilder.append((char) ch);
                         return true;
                     });
-                    ClientEmojiHandler.oldFontRenderer.draw(stack, stringBuilder.toString(), (emojiInfoArea.getX() + 15) * (1 / textScale), (emojiInfoArea.getY() + 8 + 4 * i) * (1 / textScale), 0x969696);
+                    guiGraphics.drawString(ClientEmojiHandler.oldFontRenderer, stringBuilder.toString(), (emojiInfoArea.getX() + 15) * textScale, (emojiInfoArea.getY() + 8 + 4 * i) * textScale, 0x969696);
                     ++i;
                 }
-                stack.scale(1, 1, 1);
-                stack.popPose();
+                guiGraphics.pose().scale(1, 1, 1);
+                guiGraphics.pose().popPose();
             }
             progressY = (int) (((this.categorySelectionArea.getHeight() - 10) / ((double) ClientEmojiHandler.CATEGORIES.size() - 7)) * (categoryPointer));
-            drawRectangle(stack, new Rect2i(this.categorySelectionArea.getX() + this.categorySelectionArea.getWidth() - 2, this.categorySelectionArea.getY() + progressY + 2, 1, 5), 0xff525252);
+            drawRectangle(guiGraphics, new Rect2i(this.categorySelectionArea.getX() + this.categorySelectionArea.getWidth() - 2, this.categorySelectionArea.getY() + progressY + 2, 1, 5), 0xff525252);
             EmojiCategory firstCategory = getCategory(selectionPointer);
             for (int i = 0; i < 7; i++) {
                 int selCategory = i + categoryPointer;
@@ -112,17 +108,17 @@ public class EmojiSelectionGui implements IDrawableGuiListener {
                     EmojiCategory category = ClientEmojiHandler.CATEGORIES.get(selCategory);
                     Rect2i rec = new Rect2i(categorySelectionArea.getX() + 6, categorySelectionArea.getY() + 6 + i * 12, 11, 11);
                     if (category.equals(firstCategory)) {
-                        GuiComponent.fill(stack, rec.getX() - 1, rec.getY() - 2, rec.getX() + rec.getWidth(), rec.getY() + rec.getHeight() - 1, -2130706433);
+                        guiGraphics.fill( rec.getX() - 1, rec.getY() - 2, rec.getX() + rec.getWidth(), rec.getY() + rec.getHeight() - 1, -2130706433);
                     }
                     if (rec.contains((int) lastMouseX, (int) lastMouseY) && Minecraft.getInstance().screen != null) {
-                        Minecraft.getInstance().screen.renderComponentTooltip(stack, Arrays.asList(MutableComponent.create(new LiteralContents((category.name())))), (int) lastMouseX, (int) lastMouseY);
+                        guiGraphics.renderComponentTooltip(ClientEmojiHandler.oldFontRenderer, List.of(MutableComponent.create(new LiteralContents((category.name())))), (int) lastMouseX, (int) lastMouseY);
                     }
                     if (ClientEmojiHandler.SORTED_EMOJIS_FOR_SELECTION.containsKey(category) && ClientEmojiHandler.SORTED_EMOJIS_FOR_SELECTION.get(category).size() > 0) {
-                        Minecraft.getInstance().font.draw(stack, ClientEmojiHandler.SORTED_EMOJIS_FOR_SELECTION.get(category).get(0)[0].strings.get(0), categorySelectionArea.getX() + 6, categorySelectionArea.getY() + 6 + i * 12, 0);
+                        guiGraphics.drawString(Minecraft.getInstance().font, ClientEmojiHandler.SORTED_EMOJIS_FOR_SELECTION.get(category).get(0)[0].strings.get(0), categorySelectionArea.getX() + 6, categorySelectionArea.getY() + 6 + i * 12, 0);
                     }
                 }
             }
-            fieldWidget.render(stack, (int) lastMouseX, (int) lastMouseY, 0);
+            fieldWidget.render(guiGraphics, (int) lastMouseX, (int) lastMouseY, 0);
         }
     }
 
@@ -158,8 +154,7 @@ public class EmojiSelectionGui implements IDrawableGuiListener {
             if (selectionArea.contains((int) mouseX, (int) mouseY)) {
                 for (int line = 0; line < 6; line++) {
                     Object object = getLineToDraw(line + selectionPointer);
-                    if (object instanceof Emoji[]) {
-                        Emoji[] emojis = (Emoji[]) object;
+                    if (object instanceof Emoji[] emojis) {
                         for (int i = 0; i < emojis.length; i++) {
                             if (emojis[i] != null) {
                                 float x = (categorySelectionArea.getX() + categorySelectionArea.getWidth() + 2 + 12f * i);
@@ -194,19 +189,19 @@ public class EmojiSelectionGui implements IDrawableGuiListener {
         if (selectionArea.contains((int) mouseX, (int) mouseY)) {
             selectionPointer -= delta;
             selectionPointer = Mth.clamp(selectionPointer, 1, Math.max(1, getLineAmount() - 5));
-            categoryPointer = Mth.clamp(Arrays.asList(ClientEmojiHandler.CATEGORIES).indexOf(getCategory(selectionPointer)), 0, ClientEmojiHandler.CATEGORIES.size() - 7);
+            categoryPointer = Mth.clamp(List.of(ClientEmojiHandler.CATEGORIES).indexOf(getCategory(selectionPointer)), 0, ClientEmojiHandler.CATEGORIES.size() - 7);
             return true;
         }
         return false;
     }
 
 
-    public void drawRectangle(PoseStack stack, Rect2i rectangle2d) {
-        drawRectangle(stack, rectangle2d, Integer.MIN_VALUE);
+    public void drawRectangle(GuiGraphics guiGraphics, Rect2i rectangle2d) {
+        drawRectangle(guiGraphics, rectangle2d, Integer.MIN_VALUE);
     }
 
-    public void drawRectangle(PoseStack stack, Rect2i rectangle2d, int value) {
-        GuiComponent.fill(stack, rectangle2d.getX(), rectangle2d.getY(), rectangle2d.getX() + rectangle2d.getWidth(), rectangle2d.getY() + rectangle2d.getHeight(), value);
+    public void drawRectangle(GuiGraphics guiGraphics, Rect2i rectangle2d, int value) {
+        guiGraphics.fill(rectangle2d.getX(), rectangle2d.getY(), rectangle2d.getX() + rectangle2d.getWidth(), rectangle2d.getY() + rectangle2d.getHeight(), value);
     }
 
     public void toggleSelectionArea() {
@@ -243,26 +238,26 @@ public class EmojiSelectionGui implements IDrawableGuiListener {
         return fieldWidget.isFocused();
     }
 
-    public void drawLine(PoseStack stack, float height, int line) {
+    public void drawLine(GuiGraphics guiGraphics, int height, int line) {
         Object lineToDraw = getLineToDraw(line);
         if (lineToDraw != null) {
             if (lineToDraw instanceof EmojiCategory) {
-                float textScale = 1f;
-                stack.scale(textScale, textScale, textScale);
-                Minecraft.getInstance().font.draw(stack, ((EmojiCategory) lineToDraw).name(), (categorySelectionArea.getX() + categorySelectionArea.getWidth() + 2) * (1 / textScale), (categorySelectionArea.getY() + height + 2) * (1 / textScale), 0x969696);
-                stack.scale(1, 1, 1);
+                int textScale = 1;
+                guiGraphics.pose().scale(textScale, textScale, textScale);
+                guiGraphics.drawString(Minecraft.getInstance().font, ((EmojiCategory) lineToDraw).name(), (categorySelectionArea.getX() + categorySelectionArea.getWidth() + 2) * (1 / textScale), (categorySelectionArea.getY() + height + 2) * (1 / textScale), 0x969696);
+                guiGraphics.pose().scale(1, 1, 1);
             } else {
                 Emoji[] emojis = (Emoji[]) lineToDraw;
                 for (int i = 0; i < emojis.length; i++) {
                     if (emojis[i] != null) {
-                        float x = (categorySelectionArea.getX() + categorySelectionArea.getWidth() + 2 + 12f * i);
-                        float y = (categorySelectionArea.getY() + height + 2);//
-                        Rect2i rec = new Rect2i((int) x, (int) y - 1, 11, 11);
+                        int x = (categorySelectionArea.getX() + categorySelectionArea.getWidth() + 2 + 12 * i);
+                        int y = (categorySelectionArea.getY() + height + 2);
+                        Rect2i rec = new Rect2i(x, y - 1, 11, 11);
                         if (rec.contains((int) lastMouseX, (int) lastMouseY)) {
                             lastEmoji = emojis[i];
-                            GuiComponent.fill(stack, rec.getX() - 1, rec.getY() - 1, rec.getX() + rec.getWidth(), rec.getY() + rec.getHeight(), -2130706433);
+                            guiGraphics.fill(rec.getX() - 1, rec.getY() - 1, rec.getX() + rec.getWidth(), rec.getY() + rec.getHeight(), -2130706433);
                         }
-                        Minecraft.getInstance().font.draw(stack, emojis[i].strings.get(0), x, y, 0x969696);
+                        guiGraphics.drawString(Minecraft.getInstance().font, emojis[i].strings.get(0), x, y, 0x969696);
                     }
                 }
             }
@@ -291,7 +286,7 @@ public class EmojiSelectionGui implements IDrawableGuiListener {
         if (!fieldWidget.getValue().isEmpty()) {
             selectionPointer = 1;
             filteredEmojis = new ArrayList<>();
-            List<Emoji> emojis = Constants.EMOJI_LIST.stream().filter(emoji -> emoji.strings.stream().anyMatch(s -> s.toLowerCase().contains(fieldWidget.getValue().toLowerCase()))).collect(Collectors.toList());
+            List<Emoji> emojis = Constants.EMOJI_LIST.stream().filter(emoji -> emoji.strings.stream().anyMatch(s -> s.toLowerCase().contains(fieldWidget.getValue().toLowerCase()))).toList();
             Emoji[] array = new Emoji[9];
             int i = 0;
             for (Emoji emoji : emojis) {
