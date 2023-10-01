@@ -13,13 +13,13 @@ import org.jetbrains.annotations.NotNull;
 
 public class EmojiRecipe implements Recipe<Container> {
 
-    private final ResourceLocation recipeName;
+//    private final ResourceLocation recipeName;
     private final String category;
     private final String name;
     private final String url;
 
-    public EmojiRecipe(ResourceLocation recipeName, String category, String name, String url) {
-        this.recipeName = recipeName;
+    public EmojiRecipe(String category, String name, String url) {
+//        this.recipeName = recipeName;
         this.category = category;
         this.name = name;
         this.url = url;
@@ -45,10 +45,10 @@ public class EmojiRecipe implements Recipe<Container> {
         return ItemStack.EMPTY;    }
 
 
-    @Override
-    public ResourceLocation getId() {
-        return recipeName;
-    }
+//    @Override
+//    public ResourceLocation getId() {
+//        return recipeName;
+//    }
 
     @Override
     public RecipeSerializer<?> getSerializer() {
@@ -60,9 +60,9 @@ public class EmojiRecipe implements Recipe<Container> {
         return Services.PLATFORM.getRecipeType();
     }
 
-    public ResourceLocation getRecipeName() {
-        return recipeName;
-    }
+//    public ResourceLocation getRecipeName() {
+//        return recipeName;
+//    }
 
     public String getCategory() {
         return category;

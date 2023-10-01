@@ -13,7 +13,7 @@ minecraft {
 
 dependencies {
     compileOnly("org.spongepowered:mixin:0.8.5")
-    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
+    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
     compileOnly group: 'com.esotericsoftware.yamlbeans', name: 'yamlbeans', version: '1.15'
 }
 

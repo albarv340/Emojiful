@@ -10,6 +10,7 @@ import com.hrznstudio.emojiful.api.EmojiCategory;
 import com.hrznstudio.emojiful.api.EmojiFromGithub;
 import com.hrznstudio.emojiful.datapack.EmojiRecipe;
 import com.hrznstudio.emojiful.platform.Services;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import org.lwjgl.glfw.GLFW;
@@ -59,8 +60,9 @@ public class CommonClass {
         Constants.EMOJI_LIST.removeIf(Emoji::worldBased);
         if (Services.CONFIG.loadDatapack()) {
             RecipeType<EmojiRecipe> emojiRecipeRecipeType = Services.PLATFORM.getRecipeType();
-            List<EmojiRecipe> emojiList = manager.getAllRecipesFor(emojiRecipeRecipeType);
-            for (EmojiRecipe emojiRecipe : emojiList) {
+            List<RecipeHolder<EmojiRecipe>> emojiList = manager.getAllRecipesFor(emojiRecipeRecipeType);
+            for (RecipeHolder<EmojiRecipe> emojiRecipeHolder : emojiList) {
+                EmojiRecipe emojiRecipe = emojiRecipeHolder.value();
                 EmojiFromGithub emoji = new EmojiFromGithub();
                 emoji.name = emojiRecipe.getName();
                 emoji.strings = new ArrayList<>();

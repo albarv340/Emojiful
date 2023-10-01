@@ -1,6 +1,7 @@
 package com.hrznstudio.emojiful.datapack;
 
 import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -12,14 +13,24 @@ public class EmojiRecipeSerializer implements RecipeSerializer<EmojiRecipe> {
 
     }
 
+//    @Override
+//    public EmojiRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+//        return new EmojiRecipe(recipeId, json.get("category").getAsString(), json.get("name").getAsString(), json.get("url").getAsString());
+//    }
+//
+//    @Override
+//    public EmojiRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+//        return new EmojiRecipe(recipeId, buffer.readUtf(), buffer.readUtf(), buffer.readUtf());
+//    }
+
     @Override
-    public EmojiRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-        return new EmojiRecipe(recipeId, json.get("category").getAsString(), json.get("name").getAsString(), json.get("url").getAsString());
+    public Codec<EmojiRecipe> codec() {
+        return null;
     }
 
     @Override
-    public EmojiRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-        return new EmojiRecipe(recipeId, buffer.readUtf(), buffer.readUtf(), buffer.readUtf());
+    public EmojiRecipe fromNetwork(FriendlyByteBuf buffer) {
+        return new EmojiRecipe(buffer.readUtf(), buffer.readUtf(), buffer.readUtf());
     }
 
     @Override
