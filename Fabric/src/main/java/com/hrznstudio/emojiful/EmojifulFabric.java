@@ -4,8 +4,8 @@ package com.hrznstudio.emojiful;
 //import com.hrznstudio.emojiful.datapack.EmojiRecipeSerializer;
 import com.hrznstudio.emojiful.gui.EmojifulBedChatScreen;
 import com.hrznstudio.emojiful.gui.EmojifulChatScreen;
-import com.hrznstudio.emojiful.platform.FabricConfigHelper;
-import eu.midnightdust.lib.config.MidnightConfig;
+//import com.hrznstudio.emojiful.platform.FabricConfigHelper;
+//import eu.midnightdust.lib.config.MidnightConfig;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ChatScreen;
@@ -22,7 +22,7 @@ public class EmojifulFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        MidnightConfig.init(Constants.MOD_ID, FabricConfigHelper.class);
+//        MidnightConfig.init(Constants.MOD_ID, FabricConfigHelper.class);
     }
 
 

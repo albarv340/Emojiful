@@ -94,14 +94,14 @@ public class ProfanityFilter {
 
     }
 
-    public static String filterText(String input) {
-        List<String> badWords = badWordsFound(input);
-        if (badWords.size() > 0) {
-            for (String badWord : badWords) {
-                input = input.replaceAll(EmojiUtil.cleanStringForRegex(badWord), Services.CONFIG.getReplacementString());
-            }
-            return input;
-        }
-        return input;
-    }
+//    public static String filterText(String input) {
+//        List<String> badWords = badWordsFound(input);
+//        if (badWords.size() > 0) {
+//            for (String badWord : badWords) {
+//                input = input.replaceAll(EmojiUtil.cleanStringForRegex(badWord), Services.CONFIG.getReplacementString());
+//            }
+//            return input;
+//        }
+//        return input;
+//    }
 }

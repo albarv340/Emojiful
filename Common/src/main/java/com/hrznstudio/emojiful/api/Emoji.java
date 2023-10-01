@@ -134,7 +134,7 @@ public class Emoji implements Predicate<String> {
     private void loadImage() {
         File cache = getCache();
         if (cache.exists()) {
-            if (getUrl().endsWith(".gif") && Services.CONFIG.loadGifEmojis()) {
+            if (getUrl().endsWith(".gif")) {
                 if (gifLoaderThread == null) {
                     gifLoaderThread = new Thread("Emojiful Texture Downloader #" + threadDownloadCounter.incrementAndGet()) {
                         @Override

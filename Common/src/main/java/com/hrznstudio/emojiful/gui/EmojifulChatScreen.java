@@ -21,8 +21,8 @@ public class EmojifulChatScreen extends ChatScreen {
     protected void init() {
         super.init();
         if (!Constants.error) {
-            if (Services.CONFIG.showEmojiAutocomplete()) emojiSuggestionHelper = new EmojiSuggestionHelper(this);
-            if (Services.CONFIG.showEmojiSelector()) emojiSelectionGui = new EmojiSelectionGui(this);
+            emojiSuggestionHelper = new EmojiSuggestionHelper(this);
+            emojiSelectionGui = new EmojiSelectionGui(this);
         }
     }
 

@@ -59,7 +59,7 @@ public class EmojiFontRenderer extends Font {
 
     public static Pair<String, HashMap<Integer, Emoji>> getEmojiFormattedString(String text) {
         HashMap<Integer, Emoji> emojis = new LinkedHashMap<>();
-        if (Services.CONFIG.renderEmoji() && !StringUtil.isNullOrEmpty(text)) {
+        if (!StringUtil.isNullOrEmpty(text)) {
             String unformattedText = ChatFormatting.stripFormatting(text);
             if (StringUtil.isNullOrEmpty(unformattedText))
                 return Pair.of(text, emojis);
@@ -265,7 +265,7 @@ public class EmojiFontRenderer extends Font {
 
         public boolean accept(int pos, Style style, int charInt) {
             FontSet font = EmojiFontRenderer.this.getFontSet(style.getFont());
-            if (Services.CONFIG.renderEmoji() && this.emojis.get(pos) != null) {
+            if (this.emojis.get(pos) != null) {
                 Emoji emoji = this.emojis.get(pos);
                 if (emoji != null && !this.dropShadow) {
                     EmojiUtil.renderEmoji(emoji, this.x, this.y, matrix, buffer, packedLight);

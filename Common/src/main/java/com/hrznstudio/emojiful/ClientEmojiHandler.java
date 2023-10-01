@@ -57,11 +57,11 @@ public class ClientEmojiHandler {
 
     private static void preInitEmojis() {
         CATEGORIES.addAll(Arrays.asList("Smileys & Emotion", "Animals & Nature", "Food & Drink", "Activities", "Travel & Places", "Objects", "Symbols", "Flags").stream().map(s -> new EmojiCategory(s, false)).collect(Collectors.toList()));
-        if (Services.CONFIG.loadCustom()) loadCustomEmojis();
+        loadCustomEmojis();
         //loadGithubEmojis();
-        if (Services.CONFIG.loadTwemoji()) loadTwemojis();
+        loadTwemojis();
         loadAVOEmojiAPIEmojis();
-        if (Services.CONFIG.getProfanityFilter()) ProfanityFilter.loadConfigs();
+//        ProfanityFilter.loadConfigs();
     }
 
     private static void loadCustomEmojis() {
