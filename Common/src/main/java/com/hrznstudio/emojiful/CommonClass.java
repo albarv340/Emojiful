@@ -7,10 +7,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.hrznstudio.emojiful.api.Emoji;
 import com.hrznstudio.emojiful.api.EmojiCategory;
-import com.hrznstudio.emojiful.api.EmojiFromGithub;
-import com.hrznstudio.emojiful.datapack.EmojiRecipe;
-import com.hrznstudio.emojiful.platform.Services;
-import net.minecraft.world.item.crafting.RecipeHolder;
+//import com.hrznstudio.emojiful.api.EmojiFromGithub;
+//import com.hrznstudio.emojiful.datapack.EmojiRecipe;
+//import com.hrznstudio.emojiful.platform.Services;
+//import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import org.lwjgl.glfw.GLFW;
@@ -58,26 +58,26 @@ public class CommonClass {
     public static void onRecipesUpdated(RecipeManager manager) {
         ClientEmojiHandler.CATEGORIES.removeIf(EmojiCategory::worldBased);
         Constants.EMOJI_LIST.removeIf(Emoji::worldBased);
-        if (Services.CONFIG.loadDatapack()) {
-            RecipeType<EmojiRecipe> emojiRecipeRecipeType = Services.PLATFORM.getRecipeType();
-            List<RecipeHolder<EmojiRecipe>> emojiList = manager.getAllRecipesFor(emojiRecipeRecipeType);
-            for (RecipeHolder<EmojiRecipe> emojiRecipeHolder : emojiList) {
-                EmojiRecipe emojiRecipe = emojiRecipeHolder.value();
-                EmojiFromGithub emoji = new EmojiFromGithub();
-                emoji.name = emojiRecipe.getName();
-                emoji.strings = new ArrayList<>();
-                emoji.strings.add(":" + emojiRecipe.getName() + ":");
-                emoji.location = emojiRecipe.getName();
-                emoji.url = emojiRecipe.getUrl();
-                emoji.worldBased = true;
-                Constants.EMOJI_MAP.computeIfAbsent(emojiRecipe.getCategory(), s -> new ArrayList<>()).add(emoji);
-                Constants.EMOJI_LIST.add(emoji);
-                if (ClientEmojiHandler.CATEGORIES.stream().noneMatch(emojiCategory -> emojiCategory.name().equalsIgnoreCase(emojiRecipe.getCategory().toLowerCase()))) {
-                    ClientEmojiHandler.CATEGORIES.add(0, new EmojiCategory(emojiRecipe.getCategory(), true));
-                }
-            }
-            ClientEmojiHandler.indexEmojis();
-        }
+//        if (Services.CONFIG.loadDatapack()) {
+//            RecipeType<EmojiRecipe> emojiRecipeRecipeType = Services.PLATFORM.getRecipeType();
+//            List<RecipeHolder<EmojiRecipe>> emojiList = manager.getAllRecipesFor(emojiRecipeRecipeType);
+//            for (RecipeHolder<EmojiRecipe> emojiRecipeHolder : emojiList) {
+//                EmojiRecipe emojiRecipe = emojiRecipeHolder.value();
+//                EmojiFromGithub emoji = new EmojiFromGithub();
+//                emoji.name = emojiRecipe.getName();
+//                emoji.strings = new ArrayList<>();
+//                emoji.strings.add(":" + emojiRecipe.getName() + ":");
+//                emoji.location = emojiRecipe.getName();
+//                emoji.url = emojiRecipe.getUrl();
+//                emoji.worldBased = true;
+//                Constants.EMOJI_MAP.computeIfAbsent(emojiRecipe.getCategory(), s -> new ArrayList<>()).add(emoji);
+//                Constants.EMOJI_LIST.add(emoji);
+//                if (ClientEmojiHandler.CATEGORIES.stream().noneMatch(emojiCategory -> emojiCategory.name().equalsIgnoreCase(emojiRecipe.getCategory().toLowerCase()))) {
+//                    ClientEmojiHandler.CATEGORIES.add(0, new EmojiCategory(emojiRecipe.getCategory(), true));
+//                }
+//            }
+//            ClientEmojiHandler.indexEmojis();
+//        }
     }
 
     public static boolean shouldKeyBeIgnored(int keyCode){

@@ -179,21 +179,21 @@ public class EmojiSelectionGui implements IDrawableGuiListener {
         this.lastMouseY = mouseY;
     }
 
-    @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalDelta, double verticalDelta) {
-        if (categorySelectionArea.contains((int) mouseX, (int) mouseY)) {
-            categoryPointer -= verticalDelta;
-            categoryPointer = Mth.clamp(categoryPointer, 0, ClientEmojiHandler.CATEGORIES.size() - 7);
-            return true;
-        }
-        if (selectionArea.contains((int) mouseX, (int) mouseY)) {
-            selectionPointer -= verticalDelta;
-            selectionPointer = Mth.clamp(selectionPointer, 1, Math.max(1, getLineAmount() - 5));
-            categoryPointer = Mth.clamp(List.of(ClientEmojiHandler.CATEGORIES).indexOf(getCategory(selectionPointer)), 0, ClientEmojiHandler.CATEGORIES.size() - 7);
-            return true;
-        }
-        return false;
-    }
+//    @Override
+//    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalDelta, double verticalDelta) {
+//        if (categorySelectionArea.contains((int) mouseX, (int) mouseY)) {
+//            categoryPointer -= verticalDelta;
+//            categoryPointer = Mth.clamp(categoryPointer, 0, ClientEmojiHandler.CATEGORIES.size() - 7);
+//            return true;
+//        }
+//        if (selectionArea.contains((int) mouseX, (int) mouseY)) {
+//            selectionPointer -= verticalDelta;
+//            selectionPointer = Mth.clamp(selectionPointer, 1, Math.max(1, getLineAmount() - 5));
+//            categoryPointer = Mth.clamp(List.of(ClientEmojiHandler.CATEGORIES).indexOf(getCategory(selectionPointer)), 0, ClientEmojiHandler.CATEGORIES.size() - 7);
+//            return true;
+//        }
+//        return false;
+//    }
 
 
     public void drawRectangle(GuiGraphics guiGraphics, Rect2i rectangle2d) {

@@ -1,78 +1,78 @@
-package com.hrznstudio.emojiful.datapack;
-
-import com.hrznstudio.emojiful.platform.Services;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Container;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.NotNull;
-
-public class EmojiRecipe implements Recipe<Container> {
-
-//    private final ResourceLocation recipeName;
-    private final String category;
-    private final String name;
-    private final String url;
-
-    public EmojiRecipe(String category, String name, String url) {
-//        this.recipeName = recipeName;
-        this.category = category;
-        this.name = name;
-        this.url = url;
-    }
-
-    @Override
-    public boolean matches(Container inv, Level worldIn) {
-        return false;
-    }
-
-    @Override
-    public @NotNull ItemStack assemble(Container container, RegistryAccess registryAccess) {
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return false;
-    }
-
-    @Override
-    public @NotNull ItemStack getResultItem(RegistryAccess registryAccess) {
-        return ItemStack.EMPTY;    }
-
-
+//package com.hrznstudio.emojiful.datapack;
+//
+//import com.hrznstudio.emojiful.platform.Services;
+//import net.minecraft.core.RegistryAccess;
+//import net.minecraft.resources.ResourceLocation;
+//import net.minecraft.world.Container;
+//import net.minecraft.world.item.ItemStack;
+//import net.minecraft.world.item.crafting.Recipe;
+//import net.minecraft.world.item.crafting.RecipeSerializer;
+//import net.minecraft.world.item.crafting.RecipeType;
+//import net.minecraft.world.level.Level;
+//import org.jetbrains.annotations.NotNull;
+//
+//public class EmojiRecipe implements Recipe<Container> {
+//
+////    private final ResourceLocation recipeName;
+//    private final String category;
+//    private final String name;
+//    private final String url;
+//
+//    public EmojiRecipe(String category, String name, String url) {
+////        this.recipeName = recipeName;
+//        this.category = category;
+//        this.name = name;
+//        this.url = url;
+//    }
+//
 //    @Override
-//    public ResourceLocation getId() {
-//        return recipeName;
+//    public boolean matches(Container inv, Level worldIn) {
+//        return false;
 //    }
-
-    @Override
-    public RecipeSerializer<?> getSerializer() {
-        return Services.PLATFORM.getRecipeSerializer();
-    }
-
-    @Override
-    public RecipeType<?> getType() {
-        return Services.PLATFORM.getRecipeType();
-    }
-
-//    public ResourceLocation getRecipeName() {
-//        return recipeName;
+//
+//    @Override
+//    public @NotNull ItemStack assemble(Container container, RegistryAccess registryAccess) {
+//        return ItemStack.EMPTY;
 //    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-}
+//
+//    @Override
+//    public boolean canCraftInDimensions(int width, int height) {
+//        return false;
+//    }
+//
+//    @Override
+//    public @NotNull ItemStack getResultItem(RegistryAccess registryAccess) {
+//        return ItemStack.EMPTY;    }
+//
+//
+////    @Override
+////    public ResourceLocation getId() {
+////        return recipeName;
+////    }
+//
+//    @Override
+//    public RecipeSerializer<?> getSerializer() {
+//        return Services.PLATFORM.getRecipeSerializer();
+//    }
+//
+//    @Override
+//    public RecipeType<?> getType() {
+//        return Services.PLATFORM.getRecipeType();
+//    }
+//
+////    public ResourceLocation getRecipeName() {
+////        return recipeName;
+////    }
+//
+//    public String getCategory() {
+//        return category;
+//    }
+//
+//    public String getName() {
+//        return name;
+//    }
+//
+//    public String getUrl() {
+//        return url;
+//    }
+//}

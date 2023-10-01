@@ -203,7 +203,7 @@ public class EmojiSuggestionHelper implements IDrawableGuiListener {
             EmojiSuggestionHelper.this.updating = true;
             EmojiSuggestionHelper.this.chatScreen.input.setValue(suggestion.apply(this.currentText));
             final int i = suggestion.getRange().getStart() + suggestion.getText().length();
-            EmojiSuggestionHelper.this.chatScreen.input.moveCursorTo(i, false);
+//            EmojiSuggestionHelper.this.chatScreen.input.moveCursorTo(i, false);
             EmojiSuggestionHelper.this.chatScreen.input.setHighlightPos(i);
             setIndex(this.index);
             EmojiSuggestionHelper.this.updating = false;

@@ -1,8 +1,8 @@
 package com.hrznstudio.emojiful.platform.services;
 
-import com.hrznstudio.emojiful.datapack.EmojiRecipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
+//import com.hrznstudio.emojiful.datapack.EmojiRecipe;
+//import net.minecraft.world.item.crafting.RecipeSerializer;
+//import net.minecraft.world.item.crafting.RecipeType;
 
 public interface IPlatformHelper {
 
@@ -28,7 +28,7 @@ public interface IPlatformHelper {
      */
     boolean isDevelopmentEnvironment();
 
-    RecipeType<EmojiRecipe> getRecipeType();
-
-    RecipeSerializer<EmojiRecipe> getRecipeSerializer();
+//    RecipeType<EmojiRecipe> getRecipeType();
+//
+//    RecipeSerializer<EmojiRecipe> getRecipeSerializer();
 }
